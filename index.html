@@ -1,0 +1,261 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="findUser">
+    <label for="">Find User By ID</label>
+    <input type="number" id="byID">
+    <label for="">Find User By User ID</label>
+    <input type="number" id="byUserID">
+</div>
+<button id="search" onclick="searchUsers()">Search</button>
+<div id="usersCards"></div>
+
+
+
+
+<script>
+        let id;
+        let userId;
+        let title;
+        let body;
+
+
+        function removeUser(id){
+            fetch('http://localhost:8080/removeUser/' + id, {
+              method: 'DELETE',
+            })
+            .then(res => res.text())
+            .then(res => console.log(res))
+
+        }
+        function editUser(id,title,body){
+            const editWindow = document.createElement('div');
+            editWindow.classList.add("editWindow")
+
+
+            const requestOptions  = {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                    title: title,
+	                body: body
+                })
+            }
+            fetch('http://localhost:8080/update/' + id, requestOptions)
+            .then(res => console.log(res))
+            .catch(alert("User doesn't exist in internal Databse with ID : "+ id))
+
+        }
+
+        async function searchUsers(){
+
+            let idValue = document.getElementById('byID').value
+            let byUserIdValue = document.getElementById('byUserID').value
+
+            if(idValue != ""){
+
+            const card = document.createElement("div");
+            card.classList.add("card")
+            //card.classList.add("edit")
+
+            //Fields
+            //Ids
+            const idWrapper = document.createElement("div")
+            idWrapper.classList.add("idWrapper");
+            const id = document.createElement("label");
+            const idData = document.createElement("h1");
+            id.textContent = "Id : ";
+
+            const userId = document.createElement("label");
+            const userIdData = document.createElement("h1");
+            userId.textContent = "User Id :";
+
+
+            //Body and Title
+            const title = document.createElement("label");
+            const body = document.createElement("label");
+
+            const titleData = document.createElement("h1");
+            const bodyData = document.createElement("h1");
+            ///
+
+            //Buttons
+            const editButton = document.createElement("button");
+            editButton.classList.add("edit")
+            editButton.textContent = "Edit";
+
+
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("delete")
+            deleteButton.textContent = "Delete";
+
+            //Fetch data for User
+            let microserviceIdUrl = "http://localhost:8080/posts/" + idValue;
+            fetch(microserviceIdUrl)
+                .then((response) => response.json())
+                .then((user) => {
+                    this.idData = user.id
+                    idData.textContent = user.id;
+                    userIdData.textContent = user.userId;
+                    titleData.textContent =  user.title;
+                    bodyData.textContent = user.body;
+            })
+            //Listeners
+            deleteButton.addEventListener('click', () =>{
+                removeUser(idValue)
+                card.remove()
+            })
+            editButton.addEventListener('click', () =>{
+                editWindow(idValue);
+
+            })
+
+            //creating card for user
+            const currentDiv = document.getElementById("usersCards");
+            currentDiv.appendChild(card);
+
+            card.appendChild(idWrapper)
+            idWrapper.appendChild(id)
+            idWrapper.appendChild(idData)
+            idWrapper.appendChild(userId)
+            idWrapper.appendChild(userIdData)
+            card.appendChild(title)
+            card.appendChild(titleData)
+            card.appendChild(body)
+            card.appendChild(bodyData)
+            card.appendChild(editButton)
+            card.appendChild(deleteButton)
+
+            }else if(!byUserIdValue == "") {
+            //Fetch data for User
+            let microserviceIdUrl = "http://localhost:8080/posts/group/" + byUserIdValue;
+            fetch(microserviceIdUrl)
+                .then((response) => response.json())
+                .then((user) => {
+                for(let i = 0;i < user.length; i++){
+
+                const card = document.createElement("div");
+                card.classList.add("card")
+
+
+                //Fields
+                //Ids
+                const idWrapper = document.createElement("div")
+                idWrapper.classList.add("idWrapper");
+                const id = document.createElement("label");
+                const idData = document.createElement("h1");
+                id.textContent = "Id : ";
+
+                const userId = document.createElement("label");
+                const userIdData = document.createElement("h1");
+                userId.textContent = "User Id :";
+
+
+                //Body and Title
+                const title = document.createElement("label");
+                const body = document.createElement("label");
+
+                const titleData = document.createElement("h1");
+                const bodyData = document.createElement("h1");
+                ///
+
+                //Buttons
+                const editButton = document.createElement("button");
+                editButton.classList.add("edit")
+                editButton.textContent = "Edit";
+
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete")
+                deleteButton.textContent = "Delete";
+
+                idData.textContent = user[i].id;
+                userIdData.textContent = user[i].userId;
+                titleData.textContent =  user[i].title;
+                bodyData.textContent = user[i].body;
+
+                //Listeners
+                deleteButton.addEventListener('click', () =>{
+                    removeUser(user[i].id)
+                    card.remove()
+                })
+                editButton.addEventListener('click', () =>{
+                    editWindow(user[i].id);
+
+                })
+
+                //creating card for user
+                const currentDiv = document.getElementById("usersCards");
+                currentDiv.appendChild(card);
+
+                card.appendChild(idWrapper)
+                idWrapper.appendChild(id)
+                idWrapper.appendChild(idData)
+                idWrapper.appendChild(userId)
+                idWrapper.appendChild(userIdData)
+                card.appendChild(title)
+                card.appendChild(titleData)
+                card.appendChild(body)
+                card.appendChild(bodyData)
+                card.appendChild(editButton)
+                card.appendChild(deleteButton)
+
+                }})
+
+
+            }
+        }
+
+        function editWindow(id){
+            const editWindow = document.createElement('div');
+            editWindow.classList.add("editWindow")
+            document.body.appendChild(editWindow)
+
+            const saveButton = document.createElement('button')
+            saveButton.classList.add("saveButton")
+            saveButton.textContent = "Save";
+
+            const wrapperTitle = document.createElement('titleWrapper')
+            const wrapperBody = document.createElement('bodyWrapper')
+            wrapperTitle.classList.add("editWrapper")
+            wrapperBody.classList.add("editWrapper")
+
+            const labelTitle = document.createElement('label');
+            const labelBody = document.createElement('label');
+            labelTitle.textContent = "Title : "
+            labelBody.textContent = "Body : "
+
+            const titleInput = document.createElement('input');
+            const bodyInput = document.createElement('input');
+            titleInput.classList.add("inputsEdit")
+            bodyInput.classList.add("inputsEdit")
+
+
+            wrapperTitle.appendChild(labelTitle)
+            wrapperTitle.appendChild(titleInput)
+
+            wrapperBody.appendChild(labelBody)
+            wrapperBody.appendChild(bodyInput)
+
+            editWindow.appendChild(wrapperTitle)
+            editWindow.appendChild(wrapperBody)
+            editWindow.appendChild(saveButton)
+
+            saveButton.addEventListener('click', () =>{
+                editUser(id,titleInput.value,bodyInput.value)
+                editWindow.remove();
+
+
+            })
+        }
+
+
+
+    </script>
+
+</body>
+</html>

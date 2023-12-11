@@ -1,0 +1,101 @@
+*{
+    background-color: rgb(246, 253, 255);
+
+}
+label{
+    font-size: 20px;
+
+}
+.findUser{
+    font-size: 35px;
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+
+}
+#search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 100px;
+    height: 40px;
+    margin-top: 2%;
+
+}
+.card{
+    width: 200px;
+    height: 200px;
+    background-color: grey;
+}
+.edit{
+    width: 70px;
+    height: 50px;
+    border: 4px solid rgb(0, 225, 255);
+    margin-right: 2%;
+}
+.delete{
+    width: 70px;
+    height: 50px;
+    border: 4px solid rgb(255, 0, 0);
+}
+.card{
+    width: 300px;
+    height: 400px;
+    font-size: 10px;
+    background-color: white;
+    border-right: 5px solid grey;
+    border-bottom: 5px solid grey;
+    border-top: 0.5px solid grey;
+    border-left: 0.5px solid grey;
+    padding: 1%;
+    margin-top: 20px;
+}
+
+#usersCards{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+
+
+
+
+}
+.idWrapper{
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.editWindow{
+    width: 500px;
+    height: 300px;
+    background-color: bisque;
+    position: relative;
+    margin: auto;
+    padding: 5px;
+    z-index: 100;
+
+}
+
+.inputsEdit{
+    margin: auto;
+    width: 80%;
+    height: 100px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    display: flex;
+    font-size: 20px;
+}
+
+.saveButton{
+    margin: auto;
+    margin-left: 215px;
+    width: 70px;
+    height: 50px;
+    border: 4px solid rgb(0, 225, 255);
+    margin-right: 2%;
+}
